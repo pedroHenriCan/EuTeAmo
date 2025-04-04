@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Minha Namorada</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a1a;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .container {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+            max-width: 800px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .heart {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin: 0 auto;
+            transform: scale(1);
+            animation: pulse 2s infinite;
+            filter: drop-shadow(0 0 12px rgba(255, 77, 109, 0.7));
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.95); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(0.95); }
+        }
+        
+        .heart:before, .heart:after {
+            content: "";
+            background-color: #ff4d6d;
+            width: 60px;
+            height: 96px;
+            position: absolute;
+            border-radius: 30px 30px 0 0;
+            transition: all 0.3s ease;
+        }
+        
+        .heart:before {
+            left: 60px;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+        
+        .heart:after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+        
+        .message {
+            font-size: 24px;
+            margin: 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+            line-height: 1.6;
+        }
+        
+        .message.special {
+            font-family: 'Dancing Script', cursive;
+            font-size: 32px;
+            color: #ff4d6d;
+            margin-top: 20px;
+        }
+        
+        .message.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .light {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: fade 1s forwards;
+            z-index: 3;
+        }
+        
+        @keyframes fade {
+            to {
+                transform: translate(-50%, -50%) scale(3);
+                opacity: 0;
+            }
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="container">
+        <div class="heart" id="heart"></div>
+        
+        <div class="message" id="message1">Oi amor...</div>
+        <div class="message" id="message2">Hmmmm</div>
+        <div class="message" id="message3">Perdoa eu porfavorzinho?🥺</div>
+        <div class="message special" id="message4">Eu te amo mais que tudo nesse mundo</div>
+        <div class="message" id="message5">❤️</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: "#ffffff" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.5, random: true },
+                    size: { value: 3, random: true },
+                    line_linked: { enable: true, distance: 150, color: "#ff4d6d", opacity: 0.4, width: 1 },
+                    move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: { enable: true, mode: "repulse" },
+                        onclick: { enable: true, mode: "push" }
+                    }
+                }
+            });
+            
+            const messages = [
+                { id: 'message1', delay: 1000 },
+                { id: 'message2', delay: 3000 },
+                { id: 'message3', delay: 5000 },
+                { id: 'message4', delay: 7000 },
+                { id: 'message5', delay: 9000 }
+            ];
+            
+            messages.forEach(msg => {
+                setTimeout(() => {
+                    document.getElementById(msg.id).classList.add('active');
+                }, msg.delay);
+            });
+            
+            document.body.addEventListener('click', function(e) {
+                const light = document.createElement('div');
+                light.className = 'light';
+                light.style.left = e.clientX + 'px';
+                light.style.top = e.clientY + 'px';
+                document.body.appendChild(light);
+                
+                setTimeout(() => {
+                    light.remove();
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>
