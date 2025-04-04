@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para Minha Namorada</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             margin: 0;
@@ -90,6 +91,7 @@
             font-size: 32px;
             color: #ff4d6d;
             margin-top: 20px;
+            text-shadow: 0 0 5px rgba(255, 77, 109, 0.5);
         }
         
         .message.active {
@@ -115,6 +117,33 @@
                 opacity: 0;
             }
         }
+        
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10;
+            background: rgba(255, 77, 109, 0.7);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .music-control:hover {
+            transform: scale(1.1);
+            background: rgba(255, 77, 109, 0.9);
+        }
+        
+        .music-control i {
+            color: white;
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
@@ -123,60 +152,100 @@
         <div class="heart" id="heart"></div>
         
         <div class="message" id="message1">Oi amor...</div>
-        <div class="message" id="message2">Hmmmm</div>
-        <div class="message" id="message3">Perdoa eu porfavorzinho?🥺</div>
+        <div class="message" id="message2">Você ilumina meus dias</div>
+        <div class="message" id="message3">Sua presença torna tudo mais especial</div>
         <div class="message special" id="message4">Eu te amo mais que tudo nesse mundo</div>
-        <div class="message" id="message5">❤️</div>
+        <div class="message" id="message5">Obrigado por ser você ❤️</div>
     </div>
 
+    <!-- Áudio - SUBSTITUA pelo SEU arquivo de música -->
+    <audio id="bgMusic" loop>
+        <source src="musica/Malcolm Todd - Chest Pain (I Love) (Official Visualizer).mp3" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+    </audio>
+
+    <!-- Botão de controle de música -->
+    <div class="music-control" id="musicControl">
+        <i class="fas fa-music"></i>
+    </div>
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            particlesJS('particles-js', {
-                particles: {
-                    number: { value: 80, density: { enable: true, value_area: 800 } },
-                    color: { value: "#ffffff" },
-                    shape: { type: "circle" },
-                    opacity: { value: 0.5, random: true },
-                    size: { value: 3, random: true },
-                    line_linked: { enable: true, distance: 150, color: "#ff4d6d", opacity: 0.4, width: 1 },
-                    move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
-                },
-                interactivity: {
-                    detect_on: "canvas",
-                    events: {
-                        onhover: { enable: true, mode: "repulse" },
-                        onclick: { enable: true, mode: "push" }
-                    }
+        // Configuração das partículas
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: "#ff4d6d", opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "repulse" },
+                    onclick: { enable: true, mode: "push" }
                 }
-            });
+            }
+        });
+        
+        // Sequência de mensagens
+        const messages = [
+            { id: 'message1', delay: 1000 },
+            { id: 'message2', delay: 3000 },
+            { id: 'message3', delay: 5000 },
+            { id: 'message4', delay: 7000 },
+            { id: 'message5', delay: 9000 }
+        ];
+        
+        messages.forEach(msg => {
+            setTimeout(() => {
+                document.getElementById(msg.id).classList.add('active');
+            }, msg.delay);
+        });
+        
+        // Efeito de luz ao clicar
+        document.body.addEventListener('click', function(e) {
+            const light = document.createElement('div');
+            light.className = 'light';
+            light.style.left = e.clientX + 'px';
+            light.style.top = e.clientY + 'px';
+            document.body.appendChild(light);
             
-            const messages = [
-                { id: 'message1', delay: 1000 },
-                { id: 'message2', delay: 3000 },
-                { id: 'message3', delay: 5000 },
-                { id: 'message4', delay: 7000 },
-                { id: 'message5', delay: 9000 }
-            ];
-            
-            messages.forEach(msg => {
-                setTimeout(() => {
-                    document.getElementById(msg.id).classList.add('active');
-                }, msg.delay);
+            setTimeout(() => {
+                light.remove();
+            }, 1000);
+        });
+        
+        // Controle de música
+        const music = document.getElementById('bgMusic');
+        const musicControl = document.getElementById('musicControl');
+        let isPlaying = false;
+
+        // Começa a música após 3 segundos
+        setTimeout(() => {
+            music.volume = 0.3;
+            music.play().then(() => {
+                isPlaying = true;
+            }).catch(error => {
+                console.log("Autoplay bloqueado: ", error);
+                musicControl.style.display = 'flex'; // Mostra o botão se autoplay falhar
             });
-            
-            document.body.addEventListener('click', function(e) {
-                const light = document.createElement('div');
-                light.className = 'light';
-                light.style.left = e.clientX + 'px';
-                light.style.top = e.clientY + 'px';
-                document.body.appendChild(light);
-                
-                setTimeout(() => {
-                    light.remove();
-                }, 1000);
-            });
+        }, 3000);
+
+        // Controle para pausar/play
+        musicControl.addEventListener('click', () => {
+            if(isPlaying) {
+                music.pause();
+                musicControl.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                music.play();
+                musicControl.innerHTML = '<i class="fas fa-music"></i>';
+            }
+            isPlaying = !isPlaying;
         });
     </script>
 </body>
